@@ -324,7 +324,7 @@ async fn boot(opts: Options) -> Boot {
         if opts.reset {
             // everything this site keeps in the browser, photos included: never without asking
             let ok = safety::confirm(
-                "?reset deletes the Joe Light Studio library stored in this browser, including every imported photo. \
+                "?reset deletes the Joenell Studio Lite library stored in this browser, including every imported photo. \
                  This can't be undone. Delete it?",
             );
             if ok {
@@ -367,7 +367,7 @@ async fn boot(opts: Options) -> Boot {
         crate::backend::request_persistence(|granted| {
             if !granted {
                 notice(
-                    "This browser may delete Joe Light Studio's library when it runs short of space (persistent storage wasn't granted). \
+                    "This browser may delete Joenell Studio Lite's library when it runs short of space (persistent storage wasn't granted). \
                      Keep your original photos elsewhere and use File ▸ Back Up Library… now and then.",
                 );
             }
@@ -498,7 +498,7 @@ impl WebApp {
         }
         if backend.is_some() {
             notice(
-                "Joe Light Studio in the browser is experimental. Your library is kept in this browser's storage: keep your original photos \
+                "Joenell Studio Lite in the browser is experimental. Your library is kept in this browser's storage: keep your original photos \
                  elsewhere and back up with File ▸ Back Up Library….",
             );
         }
@@ -792,7 +792,7 @@ impl eframe::App for WebApp {
 }
 
 /// "Auto" follows the browser's languages (issue #2085): the first of `navigator.languages` (else
-/// `navigator.language`) that Joe Light Studio ships becomes the UI's default. Every step is fallible
+/// `navigator.language`) that Joenell Studio Lite ships becomes the UI's default. Every step is fallible
 /// (as in [`crate::safety::acquire_tab_lock`]): without a usable navigator Auto stays English,
 /// as before.
 fn install_browser_language() {
@@ -834,7 +834,7 @@ pub fn start(chinese_font: Vec<u8>) {
         // one tab per library: two would each keep their own copy and overwrite each other's saves
         if opts.store != "memory" && safety::acquire_tab_lock().await == Some(false) {
             safety::show_blocking(
-                "Joe Light Studio is already open in another tab or window of this browser.\n\n\
+                "Joenell Studio Lite is already open in another tab or window of this browser.\n\n\
                  Switch to that tab, or close it and reload this page. (Two tabs would overwrite each other's changes.)",
             );
             return;
@@ -857,8 +857,8 @@ pub fn start(chinese_font: Vec<u8>) {
                 }
             }
             Err(e) => {
-                log::error!("Joe Light Studio failed to start: {e:?}");
-                set_status(&format!("Joe Light Studio failed to start: {e:?}"));
+                log::error!("Joenell Studio Lite failed to start: {e:?}");
+                set_status(&format!("Joenell Studio Lite failed to start: {e:?}"));
             }
         }
     });

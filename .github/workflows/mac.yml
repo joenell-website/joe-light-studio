@@ -5,6 +5,9 @@ name: Mac build
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "apps/lightcraft-web/**"
+      - ".github/workflows/web.yml"
   workflow_dispatch:
 
 permissions:
