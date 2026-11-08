@@ -16,6 +16,13 @@ Latest build: [Releases › latest](../../releases/tag/latest) → `joe-light-st
 Builds are not yet signed with an Apple Developer ID, so macOS may warn the first time you open the app
 (Control-click the app ▸ Open).
 
+## In the browser: Joenell Studio Lite
+
+The Library & Develop app also runs in the browser as **Joenell Studio Lite** at
+https://lite.joenellstudio.com/ (no install; photos stay in the browser's own storage).
+`.github/workflows/web.yml` builds it (`cargo xtask web`) and publishes it to GitHub Pages on every
+push to `main` that touches the app.
+
 ## Building
 
 - `photo-studio/` is Joe Photo Studio's source. `.github/workflows/mac.yml` builds it, nests it in

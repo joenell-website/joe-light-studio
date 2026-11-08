@@ -1,0 +1,71 @@
+# Builds Joenell Studio Lite (the browser version of Joe Light Studio, apps/lightcraft-web) and
+# publishes it to GitHub Pages at https://lite.joenellstudio.com/.
+name: Web build (Joenell Studio Lite)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/lightcraft-web/**"
+      - "crates/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "xtask/**"
+      - ".github/workflows/web.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      CARGO_TERM_COLOR: always
+      CARGO_INCREMENTAL: 0
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
+      - name: Install the wasm-bindgen CLI (version pinned in Cargo.lock)
+        run: |
+          v="$(awk '$0 == "name = \"wasm-bindgen\"" { getline; gsub(/version = |"/, ""); print; exit }' Cargo.lock)"
+          test -n "$v"
+          cargo install wasm-bindgen-cli --version "$v" --locked
+      - name: Install binaryen (wasm-opt, smaller download)
+        run: sudo apt-get update && sudo apt-get install -y binaryen
+      - name: Build the browser app
+        run: cargo xtask web
+      - name: Assemble the site
+        run: |
+          target_dir="$(cargo metadata --format-version 1 --no-deps | jq -r .target_directory)"
+          mkdir -p _site
+          cp -R "$target_dir/web-site/." _site/
+          cp LICENSE-MIT LICENSE-APACHE NOTICE _site/
+          touch _site/.nojekyll
+          echo "lite.joenellstudio.com" > _site/CNAME
+          ls -la _site
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

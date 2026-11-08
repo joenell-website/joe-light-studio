@@ -4,7 +4,7 @@ version.workspace = true
 edition.workspace = true
 license.workspace = true
 publish = false
-description = "Joe Light Studio in the browser: the egui UI compiled to WASM (build with `cargo xtask web`)"
+description = "Joenell Studio Lite in the browser: the egui UI compiled to WASM (build with `cargo xtask web`)"
 
 [lints]
 workspace = true
